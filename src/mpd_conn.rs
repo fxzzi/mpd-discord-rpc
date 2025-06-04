@@ -40,7 +40,7 @@ pub fn get_timestamp(status: &Status, mode: TimestampMode) -> ActivityTimestamps
         .expect("Failed to get system time")
         .as_secs();
 
-    let timestamps = ActivityTimestamps::new();
+    let mut timestamps = ActivityTimestamps::new();
 
     let Some(elapsed) = get_elapsed(status) else {
         return timestamps;
@@ -51,15 +51,21 @@ pub fn get_timestamp(status: &Status, mode: TimestampMode) -> ActivityTimestamps
             let Some(duration) = get_duration(status) else {
                 return timestamps;
             };
-
             let remaining = duration - elapsed;
             timestamps.end(current_time + remaining)
         }
         TimestampMode::Off => timestamps,
         TimestampMode::Elapsed => timestamps.start(current_time - elapsed),
+        TimestampMode::Both => {
+            let Some(duration) = get_duration(status) else {
+                return timestamps;
+            };
+            let start_timestamp = current_time - elapsed;
+            let end_timestamp = start_timestamp + duration;
+            timestamps.start(start_timestamp).end(end_timestamp)
+        }
     }
 }
-
 /// Attempts to read the first value for a tag
 /// (since the MPD client returns a vector of tags, or None)
 pub fn try_get_first_tag(vec: Option<&Vec<String>>) -> Option<&str> {
