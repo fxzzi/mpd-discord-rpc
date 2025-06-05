@@ -185,6 +185,10 @@ impl<'a> Service<'a> {
             if let Some(song_in_queue) = current_song {
                 let song = song_in_queue.song;
 
+                let activity_name = clamp(
+                  replace_tokens(&format.activity_name, &self.tokens.activity_name, &song, status),
+                  MAX_BYTES,
+                );
                 let details = clamp(
                     replace_tokens(&format.details, &self.tokens.details, &song, status),
                     MAX_BYTES,
@@ -204,6 +208,7 @@ impl<'a> Service<'a> {
 
                 let res = self.drpc.set_activity(|act| {
                     act.state(state)
+                        .name(activity_name)
                         ._type(ActivityType::Listening)
                         .details(details)
                         .assets(|mut assets| {

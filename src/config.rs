@@ -18,6 +18,8 @@ impl Default for TimestampMode {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Format {
+    #[serde(default = "default_activity_name")]
+    pub activity_name: String,
     #[serde(default = "default_details_format")]
     pub details: String,
     #[serde(default = "default_state_format")]
@@ -37,6 +39,7 @@ pub struct Format {
 impl Default for Format {
     fn default() -> Self {
         Self {
+            activity_name: default_activity_name(),
             details: default_details_format(),
             state: default_state_format(),
             timestamp: TimestampMode::default(),
@@ -81,6 +84,10 @@ impl Config {
             cfg
         })
     }
+}
+
+fn default_activity_name() -> String {
+    "music".to_string()
 }
 
 fn default_details_format() -> String {
