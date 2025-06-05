@@ -40,7 +40,7 @@ pub fn get_timestamp(status: &Status, mode: TimestampMode) -> ActivityTimestamps
         .expect("Failed to get system time")
         .as_secs();
 
-    let mut timestamps = ActivityTimestamps::new();
+    let timestamps = ActivityTimestamps::new();
 
     let Some(elapsed) = get_elapsed(status) else {
         return timestamps;
