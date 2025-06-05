@@ -33,6 +33,7 @@ async fn main() {
     let format = &config.format;
 
     let tokens = Tokens {
+        activity_name: get_tokens(&re, &format.activity_name),
         details: get_tokens(&re, &format.details),
         state: get_tokens(&re, &format.state),
         large_text: get_tokens(&re, &format.large_text),
@@ -101,6 +102,7 @@ async fn main() {
 }
 
 struct Tokens {
+    activity_name: Vec<String>,
     details: Vec<String>,
     state: Vec<String>,
     large_text: Vec<String>,
