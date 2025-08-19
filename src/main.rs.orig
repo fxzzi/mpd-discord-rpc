@@ -214,7 +214,7 @@ impl<'a> Service<'a> {
 
                 // discord requires details to be at least two characters
                 while details.chars().count() < 2 {
-                    details.push('\u{200B}');
+                    details.push('_');
                 }
 
                 let timestamps = get_timestamp(status, format.timestamp);
